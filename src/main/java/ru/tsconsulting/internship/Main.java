@@ -15,7 +15,7 @@ public class Main {
 
         EmployeeParser employeeParser = new EmployeeParser();
 
-        EmployeesFilePath employeesFilePath = createAndFillEmployeesFile(employeeParser,100000);
+        EmployeesFilePath employeesFilePath = createAndFillEmployeesFile(employeeParser,50);
 
         System.out.println(employeesFilePath.getPathAsString());
 
@@ -23,9 +23,9 @@ public class Main {
 
         Set<Employee> employeeSet = employeesFilePath.loadAllEmployees(employeeParser);
 
-        firstSolution(employeeSet);
+        //firstSolution(employeeSet);
 
-        //secondSolution(employeeSet);
+        secondSolution(employeeSet);
 
 
     }
@@ -59,8 +59,10 @@ public class Main {
 
         employeeGroups.forEach((departamentName, enployeeGroup)-> System.out.printf("%-10s %7.2f \u20BD кол-во работников: %4d%n",departamentName,enployeeGroup.getAverageSalary(),enployeeGroup.getSize()));
 
-
-
+        employeeGroups.entrySet().stream().map(Map.Entry::getValue).flatMap(EmployeeGroup::makeAllCombinations)
+                .filter(departmentMigration::canLeaveItsOunDepartment)
+                .flatMap(departmentMigration::getAllPossibleTransitions)
+                .forEach(System.out::println);
 
     }
     private static EmployeesFilePath createAndFillEmployeesFile(EmployeeParser parser,int employeeCount){
