@@ -4,26 +4,13 @@ import java.util.Objects;
 
 public class Employee implements Comparable<Employee>{
     private int id;
-    private String firstName;
-    private String secondName;
-    private String thirdNames;
+
+    private String FIO;
     private String departament;
     private double salary;
 
     public int getId() {
         return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public String getThirdNames() {
-        return thirdNames;
     }
 
     public String getDepartament() {
@@ -35,16 +22,12 @@ public class Employee implements Comparable<Employee>{
     }
 
     public String getFIO(){
-        return String.format("%s %s %s",firstName,secondName,thirdNames);
+        return FIO;
     }
 
-
-
-    public Employee(int id,String firstName, String secondName, String thirdNames, String departament, double salary) {
+    public Employee(int id, String FIO, String departament, double salary) {
         this.id = id;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.thirdNames = thirdNames;
+        this.FIO = FIO;
         this.departament = departament;
         this.salary = salary;
     }
@@ -69,7 +52,7 @@ public class Employee implements Comparable<Employee>{
     }
     @Override
     public String toString() {
-        return String.format("%s %s %s работает в отделе %s и получает %.0f\u20BD",firstName,secondName,thirdNames,departament,salary);
+        return String.format("%s работает в отделе %s и получает %.0f\u20BD",FIO,departament,salary);
     }
 
 }

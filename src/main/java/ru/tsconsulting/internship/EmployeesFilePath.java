@@ -4,25 +4,25 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class EmployeesFilePath {
     private Path path;
     public EmployeesFilePath(Path pathname) {
         path = pathname;
     }
-    public int fillFileByRandomEmployee( int countOfEntys, EmployeeGenerator generator, EmployeeParser employeeParser){
+    public int fillFileByRandomEmployee(int countOfEntys, EmploteeTextFileEntySupplier generator, EmploteeTextFileEntyParser emploteeTextFileEntyParser){
         if(countOfEntys<0)
             throw new IllegalArgumentException("Колличество записей в файле должно быть положительным!");
 
-        Employee currentEmployee;
+        EmploteeTextFileEnty currentEmployee;
         String currentEmployeeStr;
 
         try(BufferedWriter writer = Files.newBufferedWriter(path)) {
             for(int i = 0;i<countOfEntys;i++) {
                 currentEmployee = generator.get();
-                currentEmployeeStr = employeeParser.makeString(currentEmployee);
+                currentEmployeeStr = emploteeTextFileEntyParser.makeString(currentEmployee);
                 writer.write(currentEmployeeStr + "\n");
                 writer.flush();
             }
@@ -43,16 +43,17 @@ public class EmployeesFilePath {
             e.printStackTrace();
         }
     }
-    public Set<Employee> loadAllEmployees(EmployeeParser employeeParser){
-        try {
-            return Files.lines(path)
-                    .map(employeeParser::parseString)
-                    .collect(Collectors.toSet());
-        } catch (IOException e) {
-            System.err.println("При загрузки работников что-то пошло не так");
-            e.printStackTrace();
-            return Set.of();
-        }
+    public Set<Employee> loadAllEmployees(EmploteeTextFileEntyParser emploteeTextFileEntyParser){
+//        try {
+            return new HashSet<>();
+//                    Files.lines(path)
+//                    .map(emploteeTextFileEntyParser::parseString)
+//                    .collect(Collectors.toSet());
+//        } catch (IOException e) {
+//            System.err.println("При загрузки работников что-то пошло не так");
+//            e.printStackTrace();
+//            return new HashSet<>();
+//        }
     }
 
     public String getPathAsString(){

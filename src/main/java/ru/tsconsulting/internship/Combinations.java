@@ -76,8 +76,8 @@ public class Combinations {
     // read in N from command line, and print all subsets among N elements
     public static void main(String[] args) {
         //int n = Integer.parseInt(args[0]);
-        int n = 3;
-        String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int n = 9;
+            String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String elements = alphabet.substring(0, n);
 
 

@@ -5,6 +5,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,21 +14,49 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        EmployeeParser employeeParser = new EmployeeParser();
+        EmploteeTextFileEntyParser emploteeTextFileEntyParser = new EmploteeTextFileEntyParser();
 
-        EmployeesFilePath employeesFilePath = createAndFillEmployeesFile(employeeParser,50);
+        EmployeesFilePath myEmployeesFilePath = getEmployeesFilePath(emploteeTextFileEntyParser, args[0],50);
 
-        System.out.println(employeesFilePath.getPathAsString());
-
-        employeesFilePath.soutContent();
-
-        Set<Employee> employeeSet = employeesFilePath.loadAllEmployees(employeeParser);
+        Set<Employee> employeeSet = myEmployeesFilePath.loadAllEmployees(emploteeTextFileEntyParser);
 
         //firstSolution(employeeSet);
 
         secondSolution(employeeSet);
 
 
+    }
+
+    private static EmployeesFilePath getEmployeesFilePath(EmploteeTextFileEntyParser emploteeTextFileEntyParser, String employeesFilePathStr, int countOfEmployeesInDefaultFile) {
+        Path employeesFilePath = getPathFromStr(employeesFilePathStr);
+
+        EmployeesFilePath myEmployeesFilePath = new EmployeesFilePath(employeesFilePath);
+
+        if(Objects.isNull(employeesFilePathStr))
+            myEmployeesFilePath.fillFileByRandomEmployee(countOfEmployeesInDefaultFile, EmploteeTextFileEntySupplier.getGenerator(), emploteeTextFileEntyParser);
+
+        System.out.println(myEmployeesFilePath.getPathAsString());
+
+        myEmployeesFilePath.soutContent();
+        return myEmployeesFilePath;
+    }
+
+    private static Path getPathFromStr(String employeesFilePathStr) {
+        Path result = null;
+        if(Objects.nonNull(employeesFilePathStr))
+            try {
+                return Paths.get(employeesFilePathStr);
+            } catch (Exception e) {
+                System.err.println("Пришел не правильный путь к файлу, поэтому будем брать дефолтный");
+            }
+
+        try {
+            URL employeesURL = Main.class.getResource("employees.txt");
+            return Paths.get(employeesURL.toURI());
+        } catch (Exception e) {
+            System.err.println("С дефолтным тоже какая-то беда приключилась");
+        }
+        throw new RuntimeException("Все очень плохо с файлом на диске");
     }
 
     private static void firstSolution(Set<Employee> employeeSet){
@@ -65,7 +94,7 @@ public class Main {
                 .forEach(System.out::println);
 
     }
-    private static EmployeesFilePath createAndFillEmployeesFile(EmployeeParser parser,int employeeCount){
+    private static EmployeesFilePath createAndFillEmployeesFile(EmploteeTextFileEntyParser parser, int employeeCount){
         URL employeesURL = Main.class.getResource("employees.txt");
         Path employeesPath = null;
         try {
@@ -76,7 +105,7 @@ public class Main {
 
         EmployeesFilePath employeesFilePath = new EmployeesFilePath(employeesPath);
 
-        employeesFilePath.fillFileByRandomEmployee(employeeCount, EmployeeGenerator.getGenerator(),parser);
+        employeesFilePath.fillFileByRandomEmployee(employeeCount, EmploteeTextFileEntySupplier.getGenerator(),parser);
 
         return employeesFilePath;
     }
